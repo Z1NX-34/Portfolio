@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Projects | Z1NX Portfolio</title>
+    <meta name="description" content="Complete portfolio of projects by Tanvir Hossain Jisan (Z1NX)." />
+    <link rel="icon" href="icons/favicon.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      /* Page-specific styles */
+      .all-projects-page {
+        min-height: 100vh;
+        padding: 4rem 2rem 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--purple);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 3rem;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        background: rgba(155, 92, 255, 0.1);
+        border: 1px solid rgba(155, 92, 255, 0.2);
+        transition: all 0.3s;
+      }
+
+      .back-link:hover {
+        background: var(--purple);
+        color: #fff;
+        border-color: var(--purple);
+      }
+
+      .page-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        margin-bottom: 1rem;
+        color: var(--text);
+        background: linear-gradient(135deg, var(--text), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .page-subtitle {
+        color: var(--muted);
+        font-size: 1.15rem;
+        margin-bottom: 4rem;
+        max-width: 600px;
+        line-height: 1.7;
+      }
+
+      /* Projects Grid */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+      }
+
+      .project-card-full {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .project-card-full::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top, rgba(155, 92, 255, 0.15), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .project-card-full:hover {
+        transform: translateY(-12px);
+        border-color: rgba(155, 92, 255, 0.5);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(155, 92, 255, 0.1);
+      }
+
+      .project-card-full:hover::before {
+        opacity: 1;
+      }
+
+      .project-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-bottom: 1px solid var(--card-border);
+        background: linear-gradient(135deg, rgba(155, 92, 255, 0.2), rgba(76, 201, 240, 0.2));
+      }
+
+      .project-info {
+        padding: 1.75rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .project-category {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--maroon);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        margin-bottom: 0.75rem;
+      }
+
+      .project-name {
+        font-size: 1.5rem;
+        color: var(--text);
+        margin: 0 0 1rem;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+
+      .project-card-full:hover .project-name {
+        color: var(--purple);
+      }
+
+      .project-desc {
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 1.25rem;
+      }
+
+      .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .project-tech span {
+        font-size: 0.75rem;
+        font-family: var(--font-mono);
+        color: var(--blue);
+        background: rgba(76, 201, 240, 0.1);
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        border: 1px solid rgba(76, 201, 240, 0.25);
+      }
+
+      .project-actions {
+        display: flex;
+        gap: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .project-actions a {
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .project-actions a:first-child {
+        color: var(--purple);
+        font-weight: 500;
+      }
+
+      .project-actions a:hover {
+        color: var(--text);
+        transform: translateX(4px);
+      }
+
+      /* Light theme adjustments */
+      [data-theme="light"] .project-card-full {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      [data-theme="light"] .project-card-full:hover {
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+      }
+
+      [data-theme="light"] .project-actions {
+        border-top-color: rgba(0, 0, 0, 0.06);
+      }
+
+      [data-theme="light"] .page-title {
+        background: linear-gradient(135deg, var(--text), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      @media (max-width: 768px) {
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .all-projects-page {
+          padding: 3rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="loaded">
+    <script>
+      // Initialize theme IMMEDIATELY before content renders
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+    <main class="all-projects-page">
+      <a href="index.html" class="back-link">← Back to Home</a>
+      
+      <h1 class="page-title">All Projects</h1>
+      <p class="page-subtitle">A complete collection of my work, from simple experiments to full-scale applications.</p>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <article class="project-card-full">
+          <img src="icons/youtube-demo.png" alt="Youtube Clone" class="project-image" />
+          <div class="project-info">
+            <p class="project-category">Frontend</p>
+            <h3 class="project-name">Youtube Clone</h3>
+            <p class="project-desc">A simple frontend YouTube clone where I learned the fundamentals of coding with HTML and CSS. This was my first project.</p>
+            <div class="project-tech">
+              <span>HTML</span>
+              <span>CSS</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://z1nx-34.github.io/Youtube.com-Clone/" target="_blank">Live Demo →</a>
+              <a href="https://github.com/Z1NX-34/Youtube.com-Clone" target="_blank">Source Code</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card-full">
+          <img src="https://placehold.co/600x400/100a1f/4cc9f0?text=Mythic+Commerce" alt="Mythic Commerce" class="project-image" />
+          <div class="project-info">
+            <p class="project-category">Full Stack</p>
+            <h3 class="project-name">Mythic Commerce</h3>
+            <p class="project-desc">Immersive shopping experience with cinematic transitions, micro-interactions, and seamless payment integration.</p>
+            <div class="project-tech">
+              <span>Next.js</span>
+              <span>Stripe</span>
+              <span>Animations</span>
+            </div>
+            <div class="project-actions">
+              <a href="#" target="_blank">Live Demo →</a>
+              <a href="#" target="_blank">Source Code</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card-full">
+          <img src="https://placehold.co/600x400/100a1f/a10054?text=Aurora+Studio" alt="Aurora Studio" class="project-image" />
+          <div class="project-info">
+            <p class="project-category">Frontend</p>
+            <h3 class="project-name">Aurora Studio</h3>
+            <p class="project-desc">Creative playground for designers with instant previews and collaborative canvases using WebRTC.</p>
+            <div class="project-tech">
+              <span>Node</span>
+              <span>WebRTC</span>
+              <span>Canvas</span>
+            </div>
+            <div class="project-actions">
+              <a href="#" target="_blank">Live Demo →</a>
+              <a href="#" target="_blank">Source Code</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 4 - Placeholder for future projects -->
+        <article class="project-card-full">
+          <img src="https://placehold.co/600x400/100a1f/9b5cff?text=Coming+Soon" alt="Coming Soon" class="project-image" />
+          <div class="project-info">
+            <p class="project-category">Coming Soon</p>
+            <h3 class="project-name">New Project</h3>
+            <p class="project-desc">More exciting projects are on the way. Stay tuned for updates!</p>
+            <div class="project-tech">
+              <span>TBD</span>
+            </div>
+            <div class="project-actions">
+              <a href="#">Coming Soon →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+
+  </body>
+</html>

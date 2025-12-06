@@ -329,25 +329,49 @@ const initTechChips = () => {
   });
 };
 
-// Experience Tabs
+// Experience Tabs with Sliding Indicator
 const initExperienceTabs = () => {
   const tabs = document.querySelectorAll('.exp-tab');
   const panels = document.querySelectorAll('.exp-panel');
+  const indicator = document.querySelector('.tab-indicator');
+  let currentIndex = 0;
 
-  tabs.forEach(tab => {
+  tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => {
-      // Remove active from all tabs and panels
+      if (index === currentIndex) return; // Already on this tab
+
+      // Remove active from all tabs
       tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
 
       // Add active to clicked tab
       tab.classList.add('active');
 
-      // Show corresponding panel
+      // Slide indicator
+      if (indicator) {
+        if (index === 0) {
+          indicator.classList.remove('slide-right');
+        } else {
+          indicator.classList.add('slide-right');
+        }
+      }
+
+      // Hide current panel, show new panel with direction-based animation
+      panels.forEach(p => {
+        p.classList.remove('active', 'slide-left', 'slide-right');
+      });
+
       const targetPanel = document.getElementById(`${tab.dataset.tab}-panel`);
       if (targetPanel) {
+        // Slide from left if going to Work (index 0), slide from right if going to Studies (index 1)
+        if (index < currentIndex) {
+          targetPanel.classList.add('slide-left');
+        } else {
+          targetPanel.classList.add('slide-right');
+        }
         targetPanel.classList.add('active');
       }
+
+      currentIndex = index;
     });
   });
 };

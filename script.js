@@ -376,23 +376,202 @@ const initExperienceTabs = () => {
   });
 };
 
+// Smooth Scroll with Motion Blur for Nav Links
+const initSmoothNav = () => {
+  const links = document.querySelectorAll('a[href^="#"]');
+  
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href');
+      if (targetId === '#' || !targetId) return;
+      
+      const targetSection = document.querySelector(targetId);
+      if (!targetSection) return;
+      
+      e.preventDefault();
+      
+      // Add motion blur effect
+      document.body.classList.add('is-navigating');
+      
+      // Use Lenis for smooth scroll
+      if (window.lenis) {
+        window.lenis.scrollTo(targetSection, {
+          offset: -80, // Adjust for header height
+          duration: 0.5, // Even faster duration
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential ease out
+        });
+      } else {
+        // Fallback
+        window.scrollTo({
+          top: targetSection.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+      
+      // Remove blur after animation
+      setTimeout(() => {
+        document.body.classList.remove('is-navigating');
+      }, 400); // Remove blur quickly before stop
+    });
+  });
+};
+
+const initSpotlightEffect = () => {
+  const cards = document.querySelectorAll('.skill-card, .project-card-full, .testimonial-card');
+
+  cards.forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+};
+
+const initScrollAnimations = () => {
+  const observerOptions = {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // Handle staggered children if this is a container
+        if (entry.target.hasAttribute('data-stagger-children')) {
+          const children = entry.target.querySelectorAll('.reveal-child');
+          children.forEach((child, index) => {
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, index * 100);
+          });
+        }
+        
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal-element').forEach((el) => {
+    observer.observe(el);
+  });
+};
+
+
+const initTiltEffect = () => {
+  const cards = document.querySelectorAll('.skill-card, .project-card-full');
+
+  cards.forEach((card) => {
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none'; // Instant response
+    });
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -8; // Slightly increased angle
+      const rotateY = ((x - centerX) / centerX) * 8;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.5s ease'; // Smooth reset
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    });
+  });
+};
+
+const initTextScramble = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+  const elements = document.querySelectorAll('.highlight-name'); // Only Z1NX
+
+  elements.forEach(element => {
+    element.addEventListener('mouseover', event => {
+      let iteration = 0;
+      const originalText = event.target.dataset.value || event.target.innerText;
+      
+      // Store original text if not already stored
+      if (!event.target.dataset.value) {
+        event.target.dataset.value = event.target.innerText;
+      }
+
+      clearInterval(event.target.interval);
+
+      event.target.interval = setInterval(() => {
+        event.target.innerText = originalText
+          .split("")
+          .map((letter, index) => {
+            if (index < iteration) {
+              return event.target.dataset.value[index];
+            }
+            
+            // Return random character or space if original is space
+            if (letter === ' ') return ' ';
+            return letters[Math.floor(Math.random() * 26)];
+          })
+          .join("");
+
+        if (iteration >= event.target.dataset.value.length) {
+          clearInterval(event.target.interval);
+        }
+
+        iteration += 1 / 3;
+      }, 30);
+    });
+  });
+};
+
+const initMagneticButtons = () => {
+  const magnets = document.querySelectorAll('.primary, .ghost, .hero-cta-btn, .footer-social-icons a, .nav-link, .contact-email');
+  
+  magnets.forEach((magnet) => {
+    magnet.addEventListener('mousemove', (e) => {
+      const rect = magnet.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      // Magnetic strength (0.4 = moves 40% of distance)
+      magnet.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px)`;
+    });
+
+    magnet.addEventListener('mouseleave', () => {
+      magnet.style.transform = 'translate(0px, 0px)';
+    });
+  });
+};
+
 // Initialize everything when DOM is ready
 const initializeAll = () => {
   document.body.classList.add('loaded');
   
-  // Make all scroll elements visible immediately (no animations)
-  document.querySelectorAll('[data-scroll]').forEach(el => {
-    el.classList.add('visible');
-  });
-  document.querySelectorAll('.tech-panel').forEach(el => {
-    el.classList.add('visible');
-  });
-  
+  // Initialize all features
   initHamburgerMenu();
   initTheme();
   initProjectFilters();
   initTechChips();
   initExperienceTabs();
+  initSmoothNav();
+  initSpotlightEffect();
+  initScrollAnimations();
+  
+  // Only init advanced effects on desktop (hover capable)
+  if (window.matchMedia('(hover: hover)').matches) {
+    initTiltEffect();
+    initTextScramble();
+    initMagneticButtons();
+  }
+  
   updateActiveNav();
   updateScrollProgress();
 };

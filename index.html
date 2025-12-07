@@ -39,6 +39,12 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <!-- SVG Filter for Vertical Motion Blur -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+      <filter id="vertical-blur">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0 8" />
+      </filter>
+    </svg>
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
     <div class="scroll-progress" id="scroll-progress"></div>
     <header class="site-header" id="site-header">
@@ -121,13 +127,15 @@
         
         <!-- Hero Info Bar -->
         <div class="hero-info-bar">
-          <div class="hero-location">
-            <span class="flag">🇧🇩</span>
-            <span>Based in Bangladesh</span>
-          </div>
-          <div class="hero-time">
-            <span class="time-label">Local Time</span>
-            <span class="time-value" id="local-time">--:--</span>
+          <div class="hero-spacer"></div>
+          <div class="hero-info-group">
+            <div class="hero-location">              
+              <span>Based in Bangladesh</span>
+              <span class="flag">🇧🇩</span>
+            </div>
+            <div class="hero-time">
+              <span class="time-value" id="local-time">--:--</span>
+            </div>
           </div>
         </div>
 
@@ -139,17 +147,18 @@
           </div>
           
           <div class="hero-content">
-            <p class="eyebrow">I'm Tanvir Hossain Jisan (<span class="highlight-name">Z1NX</span>), I like to</p>
-            <h1 class="hero-title">
-              Build Interactive websites,apps and  
-              <span class="highlight">Designing brands <span class="emoji">🔥</span></span>
+            <p class="eyebrow" style="animation: hero-enter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.1s; opacity: 0;">I'm Tanvir Hossain Jisan (<span class="highlight-name">Z1NX</span>), I like to</p>
+            <h1 class="hero-title" style="animation: hero-enter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.2s; opacity: 0;">
+              Build interactive<br>
+              websites, apps, and<br>
+              <span class="highlight">design brands <span class="emoji">🔥</span></span>
             </h1>
-            <div class="hero-role-row">
+            <div class="hero-role-row" style="animation: hero-enter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.3s; opacity: 0;">
               <p class="hero-role">Full-Stack Developer | Brand Designer</p>
               <a href="#contact" class="hero-cta-btn">Contact Me</a>
             </div>
             
-            <div class="hero-socials-container">
+            <div class="hero-socials-container" style="animation: hero-enter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.4s; opacity: 0;">
               <div class="hero-socials">
                 <a href="https://www.linkedin.com/in/tanvir-hossain-jisan/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -186,7 +195,7 @@
       <section id="about" class="about-section section">
         <div class="about-container">
           <!-- Left Column: Bio -->
-          <div class="about-bio" data-scroll>
+          <div class="about-bio reveal-element">
             <h2>About Me</h2>
             <div class="bio-content">
               <p>
@@ -211,10 +220,10 @@
           </div>
 
           <!-- Right Column: Skills -->
-          <div class="about-skills" data-scroll>
-            <h3 class="skills-heading">Core Expertise</h3>
+          <div class="about-skills">
+            <h3 class="skills-heading reveal-element">Core Expertise</h3>
             <div class="skills-grid">
-              <article class="skill-card" data-scroll>
+              <article class="skill-card reveal-element stagger-1">
                 <div class="skill-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -231,7 +240,7 @@
                 </div>
               </article>
 
-              <article class="skill-card" data-scroll>
+              <article class="skill-card reveal-element stagger-2">
                 <div class="skill-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <circle cx="12" cy="12" r="3"/>
@@ -246,7 +255,7 @@
                 </div>
               </article>
 
-              <article class="skill-card" data-scroll>
+              <article class="skill-card reveal-element stagger-3">
                 <div class="skill-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
@@ -260,7 +269,7 @@
                 </div>
               </article>
 
-              <article class="skill-card" data-scroll>
+              <article class="skill-card reveal-element stagger-4">
                 <div class="skill-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -274,7 +283,7 @@
                 </div>
               </article>
 
-              <article class="skill-card skill-card-wide" data-scroll>
+              <article class="skill-card skill-card-wide reveal-element stagger-5">
                 <div class="skill-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
@@ -295,7 +304,7 @@
       </section>
 
       <!-- Experience Section -->
-      <section id="experience" class="experience section">
+      <section id="experience" class="experience section reveal-element">
         <h2>Experience</h2>
         
         <div class="experience-tabs">
@@ -366,83 +375,77 @@
       </section>
 
       <section id="projects" class="projects section">
-        <div class="projects-header">
+        <div class="projects-header reveal-element">
           <h2>Highlighted Projects</h2>
           <a href="projects.html" class="view-all-link">View All →</a>
         </div>
         
         <div class="project-tree">
           <!-- Project 1 -->
-          <div class="tree-item">
+          <div class="tree-item reveal-element stagger-1">
             <div class="tree-branch"></div>
             <div class="tree-node"></div>
             <div class="tree-content">
               <span class="tree-number">01</span>
               <h3 class="tree-title">Chronos Timepieces</h3>
+              <p class="project-desc">A modern, responsive e-commerce website for luxury watches built with vanilla HTML, CSS, and JavaScript with Supabase backend.</p>
               <div class="tree-tags">
                 <span>JavaScript</span>
                 <span>Node.js</span>
                 <span>Supabase</span>
               </div>
               <div class="tree-links">
-                <a href="https://chronostimepieces.vercel.app/" target="_blank" rel="noopener noreferrer">Live →</a>
-                <a href="https://github.com/Z1NX-34/Chronos-Timepieces" target="_blank" rel="noopener noreferrer">Code</a>
+                <a href="https://chronostimepieces.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                <a href="https://github.com/Z1NX-34/Chronos-Timepieces" target="_blank" rel="noopener noreferrer">Source Code</a>
               </div>
             </div>
             <div class="tree-preview">
               <img src="icons/Chronos-time.png" alt="Chronos Timepieces Preview" />
-              <div class="preview-overlay">
-                <p>A modern, responsive e-commerce website for luxury watches built with vanilla HTML, CSS, and JavaScript with Supabase backend. </p>
-              </div>
             </div>
           </div>
 
           <!-- Project 2 -->
-          <div class="tree-item">
+          <div class="tree-item reveal-element stagger-2">
             <div class="tree-branch"></div>
             <div class="tree-node"></div>
             <div class="tree-content">
               <span class="tree-number">02</span>
               <h3 class="tree-title">UGV Exams</h3>
+              <p class="project-desc">Interactive exam platform with real-time collaboration and instant feedback.</p>
               <div class="tree-tags">
                 <span>HTML</span>
                 <span>CSS</span>
                 <span>JavaScript</span>
               </div>
               <div class="tree-links">
-                <a href="https://ugv-exams.vercel.app/" target="_blank" rel="noopener noreferrer">Live →</a>
-                <a href="https://github.com/Z1NX-34/UGV-Exams" target="_blank" rel="noopener noreferrer">Code</a>
+                <a href="https://ugv-exams.vercel.app/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                <a href="https://github.com/Z1NX-34/UGV-Exams" target="_blank" rel="noopener noreferrer">Source Code</a>
               </div>
             </div>
             <div class="tree-preview">
               <img src="icons/ugv.png" alt="UGV Exams Preview" />
-              <div class="preview-overlay">
-                <p>Interactive exam platform with real-time collaboration and instant feedback.</p>
-              </div>
             </div>
           </div>
 
           <!-- Project 3 -->
-          <div class="tree-item">
+          <div class="tree-item reveal-element stagger-3">
             <div class="tree-branch"></div>
             <div class="tree-node"></div>
             <div class="tree-content">
               <span class="tree-number">03</span>
               <h3 class="tree-title">Youtube Clone</h3>
+              <p class="project-desc">A pixel-perfect recreation of the YouTube interface, focusing on responsive grid layouts, semantic HTML structure, and cross-browser compatibility.</p>
               <div class="tree-tags">
                 <span>HTML</span>
                 <span>CSS</span>
               </div>
               <div class="tree-links">
-                <a href="https://z1nx-34.github.io/Youtube.com-Clone/" target="_blank" rel="noopener noreferrer">Live →</a>
-                <a href="https://github.com/Z1NX-34/Youtube.com-Clone" target="_blank" rel="noopener noreferrer">Code</a>
+                <a href="https://z1nx-34.github.io/Youtube.com-Clone/" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                <a href="https://github.com/Z1NX-34/Youtube.com-Clone" target="_blank" rel="noopener noreferrer">Source Code</a>
               </div>
             </div>
             <div class="tree-preview">
               <img src="icons/youtube-demo.png" alt="Youtube Clone Preview" />
-              <div class="preview-overlay">
-                <p>A simple frontend YouTube clone where I learned the fundamentals of coding with HTML and CSS.</p>
-              </div>
             </div>
           </div>
         </div>
@@ -450,7 +453,7 @@
 
 
 
-      <section id="contact" class="contact section">
+      <section id="contact" class="contact section reveal-element">
         <div class="contact-header">
           <span class="contact-status">✓ Currently accepting projects</span>
           <h2>Let's Build Something Amazing</h2>

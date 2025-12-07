@@ -7,7 +7,7 @@
   --text: #f8fbff;
   --muted: #b6bed5;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --card-bg: rgba(5, 3, 11, 0.7);
+  --card-bg: #05030b;
   --card-border: rgba(155, 92, 255, 0.25);
   --header-bg: rgba(5, 3, 11, 0.4);
   --header-scrolled-bg: rgba(5, 3, 11, 0.7);
@@ -146,6 +146,16 @@ body.loaded {
   to {
     opacity: 1;
   }
+}
+
+/* Motion Blur Effect for Navigation */
+body.is-navigating main {
+  filter: url(#vertical-blur); /* SVG Vertical Blur */
+  transition: filter 0.1s ease; /* Fast transition */
+}
+
+main {
+  transition: filter 0.2s ease;
 }
 
 @keyframes slideUp {
@@ -480,12 +490,23 @@ main {
   top: 7rem;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
   width: min(1200px, 92vw);
   padding: 0.5rem 0;
   z-index: 10;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+
+
+.hero-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-self: start;
+  pointer-events: auto;
 }
 
 .hero-location {
@@ -525,6 +546,17 @@ main {
   .hero-info-bar {
     top: 0.5rem;
     padding: 0.25rem 1rem;
+    display: flex;
+    justify-content: center; /* Center on mobile */
+    gap: 0;
+  }
+
+  .hero-spacer {
+    display: none;
+  }
+
+  .hero-info-group {
+    align-items: center; /* Center items stack */
   }
 
   .hero-location {
@@ -598,7 +630,7 @@ main {
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
   line-height: 1.1;
   font-weight: 700;
   margin: 0.5rem 0 1.5rem;
@@ -1471,268 +1503,200 @@ button:focus-visible,
   border-color: var(--purple);
 }
 
-/* Project Tree Layout - Line on LEFT, Preview on RIGHT */
+/* Sticky Scroll Projects */
 .project-tree {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
   position: relative;
-  max-width: 1100px;
+  max-width: 1300px; /* Wider container */
   margin: 0 auto;
-  padding-left: 3rem;
+  padding-bottom: 10vh;
 }
 
-/* Vertical line on the LEFT */
+/* Remove the vertical line for sticky layout */
 .project-tree::before {
-  content: "";
-  position: absolute;
-  left: 0.5rem;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg, var(--purple), var(--blue), var(--purple));
-  opacity: 0.5;
-}
-
-.tree-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-}
-
-/* Hide branch element - using pseudo element instead */
-.tree-branch {
   display: none;
 }
 
-/* Node dot on the LEFT line */
-.tree-node {
-  position: absolute;
-  left: -2.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  background: var(--bg);
-  border: 3px solid var(--purple);
-  border-radius: 50%;
-  z-index: 2;
-  transition: all 0.3s ease;
+.tree-item {
+  position: sticky;
+  top: 15vh;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr; /* More balanced split */
+  gap: 2rem;
+  padding: 0;
+  margin-bottom: 20vh;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+  min-height: 320px; /* Thinner height */
+  transition: transform 0.3s ease;
 }
 
-/* Horizontal connector from node to content */
-.tree-item::before {
-  content: "";
-  position: absolute;
-  left: -2.5rem;
-  top: 50%;
-  width: 2.5rem;
-  height: 2px;
-  background: var(--purple);
-  opacity: 0.4;
+/* Stacking Logic */
+.tree-item:nth-child(1) { top: 15vh; z-index: 1; }
+.tree-item:nth-child(2) { top: 17vh; z-index: 2; }
+.tree-item:nth-child(3) { top: 19vh; z-index: 3; }
+.tree-item:nth-child(4) { top: 21vh; z-index: 4; }
+
+/* Remove old tree elements */
+.tree-branch, .tree-node, .tree-item::before {
+  display: none;
 }
 
-.tree-item:hover .tree-node {
-  background: var(--purple);
-  box-shadow: 0 0 20px rgba(155, 92, 255, 0.7);
-  transform: translateY(-50%) scale(1.3);
-}
-
-/* Content card - WIDE by default, shrinks on hover */
+/* Content Side */
 .tree-content {
-  flex: 1;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  transition: all 0.4s ease;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent;
+  border: none;
   max-width: 100%;
 }
 
 .tree-item:hover .tree-content {
-  max-width: calc(100% - 420px);
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(155, 92, 255, 0.4);
-}
-
-[data-theme="light"] .tree-content {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .tree-item:hover .tree-content {
-  border-color: var(--purple);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .tree-node {
-  background: #ffffff;
-}
-
-[data-theme="light"] .tree-item:hover .tree-node {
-  background: var(--purple);
+  max-width: 100%;
+  background: transparent;
+  border-color: transparent;
 }
 
 .tree-number {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--maroon);
-  letter-spacing: 0.15em;
-  font-weight: 600;
+  font-size: 4rem;
+  opacity: 0.1;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1;
 }
 
 .tree-title {
-  font-size: 1.4rem;
-  color: var(--text);
-  margin: 0.3rem 0 0.75rem;
-  font-weight: 600;
-  transition: color 0.3s ease;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.1;
 }
 
-.tree-item:hover .tree-title {
-  color: var(--purple);
+.project-desc {
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 90%;
 }
 
 .tree-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.tree-tags span {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--blue);
-  background: rgba(76, 201, 240, 0.1);
-  padding: 0.25rem 0.6rem;
-  border-radius: 4px;
-  border: 1px solid rgba(76, 201, 240, 0.2);
+  margin-bottom: 2rem;
 }
 
 .tree-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
+  margin-top: auto;
 }
 
 .tree-links a {
-  font-size: 0.9rem;
-  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .tree-links a:first-child {
-  color: var(--purple);
-  font-weight: 500;
+  background: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
 }
 
-.tree-links a:hover {
+.tree-links a:first-child:hover {
+  background: transparent;
   color: var(--text);
 }
 
-/* Preview on the RIGHT - Absolutely positioned, HIDDEN by default */
+.tree-links a:last-child {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--card-border);
+}
+
+.tree-links a:last-child:hover {
+  border-color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Preview Side (Image) */
 .tree-preview {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%) scale(0.9);
-  width: 400px;
-  background: var(--card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  overflow: hidden;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  visibility: hidden;
-  z-index: 10;
+  position: relative;
+  right: auto;
+  top: auto;
+  transform: none;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  border: none;
+  border-left: 1px solid var(--card-border);
+  border-radius: 0;
+  opacity: 1;
+  visibility: visible;
+  box-shadow: none;
+  padding: 2rem; /* Add padding to frame the image */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tree-item:hover .tree-preview {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) scale(1);
-  border-color: rgba(155, 92, 255, 0.4);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transform: none;
+  box-shadow: none;
+  border-color: var(--card-border);
 }
 
 .tree-preview img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
+  height: 100%;
+  object-fit: contain; /* Show full image */
+  object-position: center;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s ease;
+}
+
+.tree-item:hover .tree-preview img {
+  transform: scale(1.02); /* Subtle zoom on hover */
 }
 
 .preview-overlay {
-  padding: 1.25rem;
+  display: none;
 }
 
-.preview-overlay p {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.6;
-}
-
-[data-theme="light"] .tree-preview {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .tree-item:hover .tree-preview {
-  border-color: var(--purple);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-}
-
-/* Mobile: Stack vertically */
+/* Mobile: Disable Sticky */
 @media (max-width: 900px) {
+  .project-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 0;
+  }
+
   .tree-item {
+    position: relative;
+    top: auto !important;
+    margin-bottom: 0;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    min-height: auto;
   }
 
   .tree-preview {
-    opacity: 0;
-    max-height: 0;
-    transform: none;
+    height: 250px;
+    border-left: none;
+    border-top: 1px solid var(--card-border);
   }
-
-  .tree-item:hover .tree-preview {
-    opacity: 1;
-    max-height: 400px;
-    transform: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .project-tree {
-    padding-left: 2rem;
-  }
-
-  .tree-node {
-    left: -1.75rem;
-  }
-
-  .tree-item::before {
-    left: -1.5rem;
-    width: 1.5rem;
-  }
-
+  
   .tree-content {
-    padding: 1rem;
-  }
-
-  .tree-title {
-    font-size: 1.2rem;
-  }
-
-  .projects-header {
-    flex-direction: column;
-    gap: 0.75rem;
+    padding: 2rem;
   }
 }
 
@@ -1811,6 +1775,72 @@ button:focus-visible,
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2.5rem;
   margin-top: 3rem;
+}
+
+/* Skill Card with Spotlight Effect */
+.skill-card,
+.project-card-full {
+  background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+    ),
+    var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  transition: transform 0.1s ease, border-color 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.skill-card::before,
+.project-card-full::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.04),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.skill-card:hover::before,
+.project-card-full:hover::before {
+  opacity: 1;
+}
+
+.skill-card > *,
+.project-card-full > * {
+  position: relative;
+  z-index: 1;
+}
+
+.skill-card:hover,
+.project-card-full:hover {
+  border-color: rgba(155, 92, 255, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .skill-card,
+[data-theme="light"] .project-card-full {
+  background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(0, 0, 0, 0.03),
+      transparent 40%
+    ),
+    #ffffff;
 }
 
 .blog-card {
@@ -2064,10 +2094,40 @@ button:focus-visible,
   height: 100%;
 }
 
-[data-scroll] {
-  /* Scroll animations disabled - elements visible immediately */
+/* Cinematic Scroll Animations */
+.reveal-element {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform, filter;
+}
+
+.reveal-element.visible {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Staggered Delays */
+.stagger-1 { transition-delay: 100ms; }
+.stagger-2 { transition-delay: 200ms; }
+.stagger-3 { transition-delay: 300ms; }
+.stagger-4 { transition-delay: 400ms; }
+.stagger-5 { transition-delay: 500ms; }
+
+/* Hero Entrance Animation */
+@keyframes hero-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 /* Hamburger Menu */

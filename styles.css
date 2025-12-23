@@ -933,13 +933,15 @@ button:focus-visible,
 
 .about-bio h2 {
   font-family: "JetBrains Mono", monospace;
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 800;
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, #fff 0%, var(--purple) 100%);
+  background: linear-gradient(135deg, #fff 20%, var(--purple) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(155, 92, 255, 0.2));
+  letter-spacing: -0.02em;
 }
 
 .bio-content {
@@ -964,22 +966,51 @@ button:focus-visible,
 }
 
 .bio-philosophy {
-  margin-top: 2rem;
-  padding: 1.25rem;
-  background: rgba(155, 92, 255, 0.08);
-  border-left: 3px solid var(--purple);
-  border-radius: 0 0.75rem 0.75rem 0;
+  margin-top: 3rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(155, 92, 255, 0.1),
+    rgba(76, 201, 240, 0.05)
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid var(--purple);
+  border-radius: 0 1rem 1rem 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.bio-philosophy:hover {
+  transform: translateX(10px);
+  background: rgba(155, 92, 255, 0.15);
+  border-color: rgba(155, 92, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(155, 92, 255, 0.1);
 }
 
 .philosophy-label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.85rem;
   color: var(--purple);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+}
+
+.philosophy-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--purple);
+  filter: drop-shadow(0 0 8px var(--purple));
 }
 
 .about-cta {
@@ -994,6 +1025,23 @@ button:focus-visible,
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 1.5rem;
+}
+
+[data-theme="light"] .about-bio h2 {
+  background: linear-gradient(135deg, var(--text) 20%, var(--purple) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(155, 92, 255, 0.1));
+}
+
+[data-theme="light"] .bio-philosophy {
+  background: linear-gradient(
+    135deg,
+    rgba(155, 92, 255, 0.05),
+    rgba(76, 201, 240, 0.03)
+  );
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="light"] .about-skills {
